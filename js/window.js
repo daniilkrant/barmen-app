@@ -99,6 +99,18 @@ ipcRenderer.on('initThirdBottle', function(cb , data) {
     initing_bottle_index = 3;
 });
 
+ipcRenderer.on('setBottle1Volume', function(cb , data) {
+    bottle1Txt.innerHTML = data;
+});
+
+ipcRenderer.on('setBottle2Volume', function(cb , data) {
+    bottle2Txt.innerHTML = data;
+});
+
+ipcRenderer.on('setBottle3Volume', function(cb , data) {
+    bottle3Txt.innerHTML = data;
+});
+
 bottle1Btn.addEventListener('click', function () {
     bottle1Txt.innerHTML = "bottle1Btn";
     showBlocker();

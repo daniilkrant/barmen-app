@@ -86,6 +86,9 @@ function initBottles() {
         console.log("Third bottle volume " + arg);
         bottle3.fullVolume = arg
         window.webContents.send('disableRefillModal', 0);
+        window.webContents.send('setBottle1Volume', bottle1.fullVolume);
+        window.webContents.send('setBottle2Volume', bottle2.fullVolume);
+        window.webContents.send('setBottle3Volume', bottle3.fullVolume);
     })
 }
 
