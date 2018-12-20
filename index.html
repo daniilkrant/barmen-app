@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="css/common.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="main" style="background-image: url('img/background.jpg'); cursor: none;">
+    <div class="container">
+        <div class="main_content row">
+            <div class="btn-wr">
+                <button type="button" id="bottle1_btn" class="btn" draggable="false">
+                    <img src="img/bottle_3.png" alt="">
+                </button>
+                <div id="bottle1_txt" class="btn-text">
+                    <h4>70%</h4>
+                </div>
+            </div>
+            <div class="btn-wr">
+                <button type="button" id="bottle2_btn" class="btn" draggable="false">
+                    <img src="img/bottle_2.png" alt="">
+                </button>
+                <div id="bottle2_txt" class="btn-text">
+                    <h4>60%</h4>
+                </div>
+            </div>
+            <div class="btn-wr">
+                <button  type="button" id="bottle3_btn" class="btn" draggable="false">
+                    <img src="img/bottle_1.png" alt="">
+                </button>
+                <div id="bottle3_txt" class="btn-text">
+                    <h4>80%</h4>
+                </div>
+            </div>
+        </div>
+        <div class="arrow-wr">
+            <div class="r-arrow-stick"></div>
+        </div>
+    </div>
+
+</div>
+<div id="blocker_modal" class="modal">
+  <div class="modal-content">
+    <img class="center" src="img/waiting_whiskey.gif" alt="" style="width:250px;height:190px;">
+  </div>
+</div>
+
+<div id="preparing_modal" class="modal">
+    <div class="preparing-modal-content">
+      <img class="center" src="img/waiting.gif" alt="" style="width:160px;height:190px;">
+  </div>
+</div>
+
+<div id="choose_volume_modal" class="modal">
+    <div class="modal-content" style="background-color: rgb(25,31,38);">
+        <div class="btn-group">
+            <h4 id="choose_volume_bottle_number" class="btn-text">Bottle volume: </h4>
+            <button id="first_volume_btn" class="myButton" style="width:100px;height:100px;">0.5</button>
+            <button id="second_volume_btn" class="myButton" style="width:100px;height:100px;">0.7</button>
+            <button id="third_volume_btn" class="myButton" style="width:100px;height:100px;">1.0</button>
+            <button id="fourth_volume_btn" class="myButton" style="width:100px;height:100px;">1.5</button>
+          </div>
+  </div>
+</div>
+
+<script script type="text/javascript"  src="js/window.js">
+</script>
+</body>
+</html>

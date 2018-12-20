@@ -1,0 +1,275 @@
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+.popup-opened {
+    overflow: hidden;
+}
+.clearfix:after {
+    content: '';
+    cursor: none;
+    display: block;
+    clear: both;
+}
+.wrapper {
+    margin-left: auto;
+    margin-right: auto;
+}
+.img-wr {
+    text-align: center;
+}
+.img-wr img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+}
+.row {
+    display: flex;
+}
+
+.container {
+    max-width: 95%;
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+}
+.main {
+    position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+.main:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 0;
+}
+.main_content {
+    position: relative;
+    z-index: 200;
+}
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 50px;
+}
+.btn {
+    height: 70vh;
+    width: 20vw;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    outline: 0;
+    cursor: none;
+}
+.btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+}
+.btn-text {
+    text-align: center;
+    padding-top: 20px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    color: #fff;
+    font-weight: 700;
+}
+.arrow-wr {
+    position: absolute;
+    bottom: -13%;
+    right: 10px;
+    z-index: 200;
+    cursor: none;
+}
+.r-arrow-stick {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    box-sizing: border-box;
+}
+.r-arrow-stick-circ {
+    border-radius: 50%;
+    border: 3px solid #333;
+}
+.r-arrow-stick:before {
+    content: "";
+    position: absolute;
+    left: 60%;
+    top: 50%;
+    width: 30%;
+    height: 30%;
+    border-right: 3px solid #fff;
+    border-top: 3px solid #fff;
+    -webkit-transform: translate(-50% -50%) rotate(45deg);
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+.r-arrow-stick:after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 60%;
+    height: 2px;
+    background: #fff;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+ 
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    z-index: 250;
+    cursor: none;
+}
+    
+/* Modal Body */
+.modal-body {padding: 2px 16px;}
+    
+/* Modal Content */
+.modal-content {
+    background-color: rgb(9, 9, 9);
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #201f1e;
+    width: 80%;
+    z-index: 250;
+    cursor: none;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    animation-name: animate;
+    animation-duration: 0.4s
+}
+
+/* Modal Content */
+.preparing-modal-content {
+    background-color: rgb(25,31,38);
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #201f1e;
+    width: 80%;
+    z-index: 250;
+    cursor: none;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    animation-name: animate;
+    animation-duration: 0.4s
+}
+
+.myButton {
+    cursor: none;
+	-moz-box-shadow: 0px 10px 14px -7px #276873;
+	-webkit-box-shadow: 0px 10px 14px -7px #276873;
+	box-shadow: 0px 10px 14px -7px #276873;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #599bb3), color-stop(1, #408c99));
+	background:-moz-linear-gradient(top, #599bb3 5%, #408c99 100%);
+	background:-webkit-linear-gradient(top, #599bb3 5%, #408c99 100%);
+	background:-o-linear-gradient(top, #599bb3 5%, #408c99 100%);
+	background:-ms-linear-gradient(top, #599bb3 5%, #408c99 100%);
+	background:linear-gradient(to bottom, #599bb3 5%, #408c99 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#599bb3', endColorstr='#408c99',GradientType=0);
+	background-color:#599bb3;
+	-moz-border-radius:8px;
+	-webkit-border-radius:8px;
+	border-radius:8px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:20px;
+	font-weight:bold;
+	padding:32px 32px;
+    text-decoration:none;
+    outline: none;
+    margin: 10px;
+	text-shadow:0px 1px 0px #3d768a;
+}
+.myButton:hover {
+    cursor: none;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #408c99), color-stop(1, #599bb3));
+	background:-moz-linear-gradient(top, #408c99 5%, #599bb3 100%);
+	background:-webkit-linear-gradient(top, #408c99 5%, #599bb3 100%);
+	background:-o-linear-gradient(top, #408c99 5%, #599bb3 100%);
+	background:-ms-linear-gradient(top, #408c99 5%, #599bb3 100%);
+	background:linear-gradient(to bottom, #408c99 5%, #599bb3 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#408c99', endColorstr='#599bb3',GradientType=0);
+	background-color:#408c99;
+}
+.myButton:active {
+    cursor: none;
+	position:relative;
+	top:1px;
+}
+
+
+/* Add Animation */
+@keyframes animate {
+    from {opacity: 0}
+    to {opacity: 1}
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+/* http://meyerweb.com/eric/tools/css/reset/
+ v2.0 | 20110126
+ License: none (public domain)
+ */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+}
+ol, ul {
+    list-style: none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after, q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
