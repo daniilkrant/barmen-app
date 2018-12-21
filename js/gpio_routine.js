@@ -13,7 +13,6 @@ exports.startPouring = function(drink_name) {
 
 exports.stopPouring = function(drink_name) {
     var gpioPin = consts.pinsMap.get(drink_name)
-    console.log('Pin ' + gpioPin)
-
+    console.log('Pin close' + gpioPin)
     gpio.close(gpioPin)
 }

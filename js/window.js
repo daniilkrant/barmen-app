@@ -73,6 +73,10 @@ ipcRenderer.on('disableInitingModal', function(event , data) {
     waitingModal.style.display = "none";
 });
 
+ipcRenderer.on('enableInitingModal', function(event , data) {
+    waitingModal.style.display = "block";
+});
+
 ipcRenderer.on('enableRefillModal', function(event , data) {
     chooseVolumeModal.style.display = "block";
 });
@@ -111,25 +115,24 @@ ipcRenderer.on('setBottle3Volume', function(cb , data) {
     bottle3Txt.innerHTML = data;
 });
 
-bottle1Btn.addEventListener('click', function () {
-    bottle1Txt.innerHTML = "bottle1Btn";
+ipcRenderer.on('showPouringModal', function(cb , data) {
     showBlocker();
+});
+
+ipcRenderer.on('hidePouringModal', function(cb , data) {
+    hideBlocker();
+});
+
+bottle1Btn.addEventListener('click', function () {
     ipcRenderer.send('bottle-pressed', 1)
-    setTimeout(hideBlocker, blockerTimeout);
 });
 
 bottle2Btn.addEventListener('click', function () {
-    bottle2Txt.innerHTML = "bottle2Btn";
-    showBlocker();
     ipcRenderer.send('bottle-pressed', 2)
-    setTimeout(hideBlocker, blockerTimeout);
 });
 
 bottle3Btn.addEventListener('click', function () {
-    bottle3Txt.innerHTML = "bottle3Btn";
-    showBlocker();
     ipcRenderer.send('bottle-pressed', 3)
-    setTimeout(hideBlocker, blockerTimeout);
 });
 
 }
