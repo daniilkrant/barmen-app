@@ -19,6 +19,8 @@ const secondVolumeBtn = document.getElementById("second_volume_btn")
 const thirdVolumeBtn = document.getElementById("third_volume_btn")
 const fourthVolumeBtn = document.getElementById("fourth_volume_btn")
 
+const musicBtn = document.getElementById("music_button")
+
 const blockerTimeout = 1500
 
 chooseVolumeModal.style.display = "none";
@@ -67,6 +69,10 @@ thirdVolumeBtn.addEventListener('click', function() {
 
 fourthVolumeBtn.addEventListener('click', function() {
     volumeBtnEvent(4)
+})
+
+musicBtn.addEventListener('click', function() {
+    ipcRenderer.send('music-pressed', 1)
 })
 
 ipcRenderer.on('disableInitingModal', function(event , data) {

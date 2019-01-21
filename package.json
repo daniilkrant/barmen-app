@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "epoll": "^2.0.6",
+    "howler": "^2.1.1",
     "onoff": "^3.2.2",
     "pi-gpio": "0.0.8",
     "python-shell": "^1.0.6",

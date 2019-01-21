@@ -7,8 +7,11 @@ const {ipcMain} = require('electron')
 const {PythonShell} = require("python-shell")
 
 let window = null
-let scale1py
+let musicWindow = null
+let scale1py, scale2py, scale3py
 var scale1pyPath = 'hx711py/scale1.py'
+var scale2pyPath = 'hx711py/scale2.py'
+var scale3pyPath = 'hx711py/scale3.py'
 var pyShellOptions = {
     mode: 'text',
     pythonOptions: ['-u'],
@@ -94,38 +97,7 @@ app.once('ready', () => {
           window.webContents.send('setBottle3Volume', bottle3.fullVolume);
       })
   }
-  
-  function lauchFirstScaleScript() {
-      window.webContents.send('enableInitingModal', 0);  
-      scale1py = new PythonShell(scale1pyPath, pyShellOptions);
-      scale1py.on('message', function (weight) {
-          if (isInited === false) {
-              window.webContents.send('disableInitingModal', 0);
-              initBottlesFirstTime();
-              isInited = true;
-          } else {
-              bottle1.poured = (weight * (-1) | 0);
-              console.log("bottle1.poured: " + bottle1.poured);
-              if (bottle1.isPouring) {
-                console.log("poured: " + bottle1.poured + " currentLevel: " + bottle1.currentLevel +  " portion: " + consts.portionMl)
-                if (bottle1.poured < (bottle1.currentLevel + consts.portionMl)) {
-                } else {
-                    gpio.stopPouring(consts.bottle1Name)
-                    window.webContents.send('hidePouringModal', 0);
-                    bottle1.isPouring = false;
-                }
-              }
-            }
-      });
-  }
-
-  function startFirstBottleStopping() {
-      let currentLevel = bottle1.poured;
-      while (bottle1.poured < (currentLevel + 50)) {
-      }
-      gpio.stopPouring(consts.bottle1Name)
-  }
-
+   
   window = new BrowserWindow({
     x: 0,
     y: 0,
@@ -146,8 +118,8 @@ app.once('ready', () => {
 
   window.once('ready-to-show', () => {
     window.maximize()
+    initBottlesFirstTime()
     window.show()
-    lauchFirstScaleScript()
   })
 
   window.on('closed', () => {
@@ -171,6 +143,34 @@ app.once('ready', () => {
         window.webContents.send('showPouringModal', 0);
     }
   })
+
+  ipcMain.on('music-pressed', (event, arg) => {
+    console.log('music-pressed');
+    musicWindow = new BrowserWindow({
+        x: 0,
+        y: 0,
+        width: 800,
+        height: 480,  
+        show: false,
+        resizable: false,
+        frame: false,
+        toolbar: false,
+        transparent: true
+      })
+    
+      musicWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'player/howler.js/examples/player', 'index.html'),
+        protocol: 'file:',
+        slashes: true
+      }))
+    
+      musicWindow.once('ready-to-show', () => {
+        window.hide()
+        musicWindow.maximize()
+        musicWindow.show()
+      })
+  })
+
 })
 
 
