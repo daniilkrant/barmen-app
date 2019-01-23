@@ -1,22 +1,14 @@
 const {app, BrowserWindow} = require('electron')
 const path = require('path')
 const url = require('url')
-const gpio = require('./js/gpio_routine')
+const http = require('http')
+const superagent = require('superagent');
 const consts = require('./js/consts')
 const {ipcMain} = require('electron')
-const {PythonShell} = require("python-shell")
 
 let window = null
 let musicWindow = null
-let scale1py, scale2py, scale3py
-var scale1pyPath = 'hx711py/scale1.py'
-var scale2pyPath = 'hx711py/scale2.py'
-var scale3pyPath = 'hx711py/scale3.py'
-var pyShellOptions = {
-    mode: 'text',
-    pythonOptions: ['-u'],
-    pythonPath: '/usr/bin/python',
-};
+var serverAddr = 'http://localhost:9000'
 
 class Bottle {
     constructor(full_volume, poured, position, is_pouring, current_level) {
@@ -118,30 +110,26 @@ app.once('ready', () => {
 
   window.once('ready-to-show', () => {
     window.maximize()
-    initBottlesFirstTime()
     window.show()
+    initBottlesFirstTime()
   })
 
   window.on('closed', () => {
     win = null
   })
 
-  ipcMain.on('bottle-pressed', (event, arg) => {
-    console.log(arg);
-    if (arg === 1) {
-        window.webContents.send('showPouringModal', 0);
-        bottle1.currentLevel = bottle1.poured;
-        gpio.startPouring(consts.bottle1Name)
-        bottle1.isPouring = true;
-    }
-    if (arg === 2) {
-        gpio.startPouring(consts.bottle2Name)
-        window.webContents.send('showPouringModal', 0);
-    }
-    if (arg === 3) {
-        gpio.startPouring(consts.bottle3Name)
-        window.webContents.send('showPouringModal', 0);
-    }
+  ipcMain.on('bottle-pressed', (event, scale_num) => {
+    window.webContents.send('showPouringModal', 0);
+
+    superagent.get(serverAddr)
+    .query({scale: scale_num, volume: '50'})
+    .buffer(true)
+    .then((res, err) => {
+        if (err) { return console.log(err); }
+        console.log(res.text)
+        window.webContents.send('hidePouringModal', 0);
+    });
+
   })
 
   ipcMain.on('music-pressed', (event, arg) => {

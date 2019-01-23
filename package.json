@@ -21,6 +21,9 @@
     "onoff": "^3.2.2",
     "pi-gpio": "0.0.8",
     "python-shell": "^1.0.6",
-    "sleep": "^5.2.3"
+    "request": "^2.88.0",
+    "sleep": "^5.2.3",
+    "superagent": "^4.1.0",
+    "sync-request": "^6.0.0"
   }
 }

@@ -3,13 +3,21 @@ import time
 import sys
 from hx711 import HX711
 
+scalesAmount = 3
+
+scaleList=[]
+gpioList=[]
+
 # GPIO pins
 print('Server: Setting scales')
-scale1 = HX711(21, 22)
+scaleList.append(HX711(21, 22))
+gpioList.append(12)
 print('Server: First scales created!')
-scale2 = HX711(23, 24)
+scaleList.append(HX711(23, 24))
+gpioList.append(13)
 print('Server: Second scales created!')
-scale3 = HX711(27, 28)
+scaleList.append(HX711(27, 28))
+gpioList.append(14)
 print('Server: Third scales created!')
 
 def cleanAndExit():
@@ -26,54 +34,42 @@ def setupScales():
     # The first parameter is the order in which the bytes are used to build the "long" value.
     # The second paramter is the order of the bits inside each byte.
     # According to the HX711 Datasheet, the second parameter is MSB so you shouldn't need to modify it.
-    scale1.set_reading_format("MSB", "MSB")
-    scale2.set_reading_format("MSB", "MSB")
-    scale3.set_reading_format("MSB", "MSB")
+    for i in xrange(scalesAmount):
+        scaleList[i].set_reading_format("MSB", "MSB")
 
     # HOW TO CALCULATE THE REFFERENCE UNIT
     # To set the reference unit to 1. Put 1kg on your sensor or anything you have and know exactly how much it weights.
     # In this case, 92 is 1 gram because, with 1 as a reference unit I got numbers near 0 without any weight
     # and I got numbers around 184000 when I added 2kg. So, according to the rule of thirds:
     # If 2000 grams is 184000 then 1000 grams is 184000 / 2000 = 92.
-    #scale1.set_reference_unit(2005)
-    scale1.set_reference_unit(2005)
-    scale2.set_reference_unit(2005)
-    scale3.set_reference_unit(2005)
-
-    scale1.reset()
-    scale1.tare()
-
-    scale2.reset()
-    scale2.tare()
-    
-    scale3.reset()
-    scale3.tare()
-
-def getFirstWeight():
-    #val_A = hx.get_weight_A(5)
-    val = scale1.get_weight(7)
-    scale1.power_down()
-    scale1.power_up()
-    return val
-
-def getSecondWeight():
-    #val_A = hx.get_weight_A(5)
-    val = scale2.get_weight(7)
-    scale2.power_down()
-    scale2.power_up()
-    return val
-
-def getThirdWeight():
-    #val_A = hx.get_weight_A(5)
-    val = scale3.get_weight(7)
-    scale3.power_down()
-    scale3.power_up()
-    return val
+    #scale1.set_reference_unit(1)
+    for i in xrange(scalesAmount):
+        scaleList[i].set_reference_unit(2005)
+        scaleList[i].reset()
+        scaleList[i].tare()
 
 def getWeight(index):
-    if index == '1':
-        return getFirstWeight()
-    if index == '2':
-        return getSecondWeight()
-    if index == '3':
-        return getThirdWeight()
+    val = scaleList[index].get_weight(7)
+    scaleList[index].power_down()
+    scaleList[index].power_up()
+    return val
+
+#blocking
+def pour(index, volume):
+    i_index = int(index)
+
+    current_level = getWeight(i_index)
+    GPIO.setup(gpioList[i_index], GPIO.OUT)
+    GPIO.output(gpioList[i_index], GPIO.HIGH)
+
+    time.sleep(3)
+
+    # while True:
+    #     if getWeight(i_index) <= (current_level - volume):
+    #         # GPIO.output(gpioList[i_index], GPIO.LOW)
+    #         break
+    #     else:
+    #         sleep(0.01)
+
+
+

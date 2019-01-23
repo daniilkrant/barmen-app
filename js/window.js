@@ -21,10 +21,8 @@ const fourthVolumeBtn = document.getElementById("fourth_volume_btn")
 
 const musicBtn = document.getElementById("music_button")
 
-const blockerTimeout = 1500
-
 chooseVolumeModal.style.display = "none";
-waitingModal.style.display = "block";
+waitingModal.style.display = "none";
 
 let ipc_cb
 let initing_bottle_index
