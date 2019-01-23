@@ -147,7 +147,7 @@ app.once('ready', () => {
       })
     
       musicWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'player/howler.js/examples/player', 'index.html'),
+        pathname: path.join(__dirname, 'player', 'index.html'),
         protocol: 'file:',
         slashes: true
       }))
