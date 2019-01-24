@@ -66,14 +66,12 @@ class PourRoutine(object):
         time.sleep(1)
         GPIO.output(self.gpioList[i_index], trigger_off)
 
-        # i_index = int(index)
-
         # current_level = self.getWeight(i_index)
         # GPIO.setup(self.gpioList[i_index], GPIO.OUT)
-        # GPIO.output(self.gpioList[i_index], GPIO.HIGH)
+        # GPIO.output(self.gpioList[i_index], trigger_on)
         # while True:
         #     if getWeight(i_index) <= (current_level - volume):
-        #         # GPIO.output(gpioList[i_index], GPIO.LOW)
+        #         GPIO.output(gpioList[i_index], trigger_off)
         #         break
         #     else:
         #         sleep(0.01)

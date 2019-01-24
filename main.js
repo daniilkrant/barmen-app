@@ -6,7 +6,7 @@ const superagent = require('superagent');
 const consts = require('./js/consts')
 const {ipcMain} = require('electron')
 
-let window = null
+let barmenWindow = null
 let musicWindow = null
 var serverAddr = 'http://localhost:9000'
 
@@ -68,29 +68,29 @@ var bottle3 = new Bottle(0, 0, 3, false, 0)
 
 app.once('ready', () => {
   function initBottlesFirstTime() {
-      window.webContents.send('enableRefillModal', 0);
-      window.webContents.send('initFirstBottle', 0);
+      barmenWindow.webContents.send('enableRefillModal', 0);
+      barmenWindow.webContents.send('initFirstBottle', 0);
       ipcMain.on('initFirstBottleResponse', (event, arg) => {
           console.log("First bottle volume " + arg);
           bottle1.fullVolume = arg
-          window.webContents.send('initSecondBottle', 0);
+          barmenWindow.webContents.send('initSecondBottle', 0);
       })
       ipcMain.on('initSecondBottleResponse', (event, arg) => {
           console.log("Second bottle volume " + arg);
           bottle2.fullVolume = arg
-          window.webContents.send('initThirdBottle', 0);
+          barmenWindow.webContents.send('initThirdBottle', 0);
       })
       ipcMain.on('initThirdBottleResponse', (event, arg) => {
           console.log("Third bottle volume " + arg);
           bottle3.fullVolume = arg
-          window.webContents.send('disableRefillModal', 0);
-          window.webContents.send('setBottle1Volume', bottle1.fullVolume);
-          window.webContents.send('setBottle2Volume', bottle2.fullVolume);
-          window.webContents.send('setBottle3Volume', bottle3.fullVolume);
+          barmenWindow.webContents.send('disableRefillModal', 0);
+          barmenWindow.webContents.send('setBottle1Volume', bottle1.fullVolume);
+          barmenWindow.webContents.send('setBottle2Volume', bottle2.fullVolume);
+          barmenWindow.webContents.send('setBottle3Volume', bottle3.fullVolume);
       })
   }
    
-  window = new BrowserWindow({
+  barmenWindow = new BrowserWindow({
     x: 0,
     y: 0,
     width: 800,
@@ -102,24 +102,24 @@ app.once('ready', () => {
     transparent: true
   })
 
-  window.loadURL(url.format({
+  barmenWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
     slashes: true
   }))
 
-  window.once('ready-to-show', () => {
-    window.maximize()
-    window.show()
+  barmenWindow.once('ready-to-show', () => {
+    barmenWindow.maximize()
+    barmenWindow.show()
     initBottlesFirstTime()
   })
 
-  window.on('closed', () => {
+  barmenWindow.on('closed', () => {
     win = null
   })
 
   ipcMain.on('bottle-pressed', (event, scale_num) => {
-    window.webContents.send('showPouringModal', 0);
+    barmenWindow.webContents.send('showPouringModal', 0);
 
     superagent.get(serverAddr)
     .query({scale: scale_num, volume: '50'})
@@ -127,7 +127,7 @@ app.once('ready', () => {
     .then((res, err) => {
         if (err) { return console.log(err); }
         console.log(res.text)
-        window.webContents.send('hidePouringModal', 0);
+        barmenWindow.webContents.send('hidePouringModal', 0);
     });
 
   })
@@ -153,19 +153,25 @@ app.once('ready', () => {
       }))
     
       musicWindow.once('ready-to-show', () => {
-        window.hide()
+        barmenWindow.hide()
         musicWindow.maximize()
         musicWindow.show()
       })
+  })
+
+  ipcMain.on('barmen-pressed', (event, arg) => {
+    console.log('barmen-pressed');
+    musicWindow.hide()
+    barmenWindow.show()
   })
 
 })
 
 
 // Start pouring
-// window   -->   main  -->   gpio_routine
+// barmenWindow   -->   main  -->   gpio_routine
 //     button_pres     gpio
 
 // Stop pouring
-// gpio_routine   -->   main   -->   window
+// gpio_routine   -->   main   -->   barmenWindow
 //               done          done

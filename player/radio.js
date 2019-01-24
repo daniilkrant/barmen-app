@@ -1,18 +1,16 @@
-/*!
- *  Howler.js Radio Demo
- *  howlerjs.com
- *
- *  (c) 2013-2018, James Simpson of GoldFire Studios
- *  goldfirestudios.com
- *
- *  MIT License
- */
+const {ipcRenderer} = require('electron')
 
 // Cache references to DOM elements.
 var elms = ['station0', 'title0', 'live0', 'playing0', 'station1', 'title1', 'live1', 'playing1', 'station2', 'title2', 'live2', 'playing2', 'station3', 'title3', 'live3', 'playing3', 'station4', 'title4', 'live4', 'playing4'];
 elms.forEach(function(elm) {
   window[elm] = document.getElementById(elm);
 });
+const barmen_btn = document.getElementById('barmen_button')
+
+barmen_btn.addEventListener('click', function() {
+    console.log('barmen-pressed')
+    ipcRenderer.send('barmen-pressed', 0)
+})
 
 /**
  * Radio class containing the state of our stations.
@@ -21,6 +19,7 @@ elms.forEach(function(elm) {
  */
 var Radio = function(stations) {
   var self = this;
+  console.log("RADIO")
 
   self.stations = stations;
   self.index = 0;
@@ -53,17 +52,18 @@ Radio.prototype = {
     index = typeof index === 'number' ? index : self.index;
     var data = self.stations[index];
 
-    // If we already loaded this track, use the current one.
-    // Otherwise, setup and load a new Howl.
-    if (data.howl) {
-      sound = data.howl;
-    } else {
-      sound = data.howl = new Howl({
+    var arrayLength = self.stations.length;
+    for (var i = 0; i < arrayLength; i++) {
+        if (self.stations[i].howl) {
+            self.stations[i].howl.stop()
+        }
+    }
+
+    sound = data.howl = new Howl({
         src: data.src,
         html5: true, // A live stream can only be played through HTML5 Audio.
         format: ['mp3', 'aac']
-      });
-    }
+    });
 
     // Begin playing the sound.
     sound.play();
@@ -128,8 +128,8 @@ var radio = new Radio([
   },
   {
     freq: '98.9',
-    title: "CNN",
-    src: 'http://tunein.streamguys1.com/cnn',
+    title: "Radio Roks",
+    src: 'https://tunein.com/radio/Radio-ROKS-Ukraine-1036-s103802/',
     howl: null
   },
   {
