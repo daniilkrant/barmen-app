@@ -8,6 +8,8 @@
  *  MIT License
  */
 
+const fs = require('fs');
+
 var elms = ['track', 'timer', 'duration', 'playBtn', 'pauseBtn', 'prevBtn', 'nextBtn', 'playlistBtn', 'volumeBtn', 'progress', 'bar', 'wave', 'loading', 'playlist', 'list', 'volume', 'barEmpty', 'barFull', 'sliderBtn'];
 elms.forEach(function(elm) {
   window[elm] = document.getElementById(elm);
@@ -268,24 +270,15 @@ Player.prototype = {
   }
 };
 
-// Setup our new audio player class and pass it the playlist.
-var player = new Player([
-  {
-    title: 'Rave Digger',
-    file: 'rave_digger',
-    howl: null
-  },
-  {
-    title: '80s Vibe',
-    file: '80s_vibe',
-    howl: null
-  },
-  {
-    title: 'Running Out',
-    file: 'running_out',
-    howl: null
-  }
-]);
+var play_list = []
+
+const audioFolder = './player/audio/';
+fs.readdirSync(audioFolder).forEach(c_file => {
+    let item = {title: c_file, file: c_file, howl: null}
+    play_list.push(item)
+});
+
+var player = new Player(play_list)
 
 // Bind our player controls.
 playBtn.addEventListener('click', function() {
