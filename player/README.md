@@ -1,13 +1,12 @@
-# Audio Player ([Live Demo](https://howlerjs.com/#player))
+# Live Streaming Audio ([Live Demo](https://howlerjs.com/#radio))
 
-![Audio Player](https://s3.amazonaws.com/howler.js/screenshot-player.jpg "Player Screenshot")
+![Radio Player](https://s3.amazonaws.com/howler.js/screenshot-radio.jpg "Radio Screenshot")
 
 ## Description
-This example displays how to construct a basic audio player using howler.js as the engine powering it. The only outside framework being used is [SiriWave.js](https://github.com/CaffeinaLab/SiriWaveJS) to provide some visual sugar.
+This example displays how to use howler.js to stream live audio, such as in this simple radio app.
 
-* Controls: play, pause, next, previous, volume.
-* Implements playlist support.
-* Displays playback progress in real-time.
+* Controls: start, stop.
+* Allows switching between multiple live streams.
 * Full-screen and responsive for desktop/mobile.
 
 ## How-To
@@ -17,4 +16,4 @@ This example displays how to construct a basic audio player using howler.js as t
 2. Open `index.html` in your favorite browser.
 
 ## Credits
-Sample audio tracks by [FoolBoyMedia](http://www.foolboymedia.co.uk/), licensed under [Creative Commons](http://creativecommons.org/licenses/by-nc/3.0/).
+Live audio streams provided by [TuneIn](https://tunein.com/).

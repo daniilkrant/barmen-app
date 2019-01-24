@@ -3,6 +3,9 @@ import time
 import sys
 from hx711 import HX711
 
+trigger_on = GPIO.LOW
+trigger_off = GPIO.HIGH
+
 class PourRoutine(object):
     def __init__(self):
         self.scalesAmount = 3
@@ -59,9 +62,9 @@ class PourRoutine(object):
         i_index = int(index) - 1
 
         GPIO.setup(self.gpioList[i_index], GPIO.OUT)
-        GPIO.output(self.gpioList[i_index], GPIO.HIGH)
-        time.sleep(3)
-        GPIO.output(self.gpioList[i_index], GPIO.LOW)
+        GPIO.output(self.gpioList[i_index], trigger_on)
+        time.sleep(1)
+        GPIO.output(self.gpioList[i_index], trigger_off)
 
         # i_index = int(index)
 

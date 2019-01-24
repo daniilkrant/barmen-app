@@ -3,51 +3,81 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="user-scalable=no">
-  <title>Howler.js Audio Player</title>
+  <title>Howler.js Radio</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <!-- Top Info -->
-  <div id="title">
-    <span id="track"></span>
-    <div id="timer">0:00</div>
-    <div id="duration">0:00</div>
-  </div>
-
-  <!-- Controls -->
-  <div class="controlsOuter">
-    <div class="controlsInner">
-      <div id="loading"></div>
-      <div class="btn" id="playBtn"></div>
-      <div class="btn" id="pauseBtn"></div>
-      <div class="btn" id="prevBtn"></div>
-      <div class="btn" id="nextBtn"></div>
+  <!-- Stations -->
+  <div class="padding"></div>
+  <div id="station0" class="station">
+    <div class="title">
+      <div id="title0" class="subtitle"></div>
+      <div id="live0" class="live">LIVE</div>
+      <div id="playing0" class="playing">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+      </div>
     </div>
-    <div class="btn" id="playlistBtn"></div>
-    <div class="btn" id="volumeBtn"></div>
   </div>
-
-  <!-- Progress -->
-  <div><button>Кнопка с текстом</button></div>
-  <div id="waveform"></div>
-  <div id="bar"></div>
-  <div id="progress"></div>
-
-  <!-- Playlist -->
-  <div id="playlist">
-    <div id="list"></div>
+  <div id="station1" class="station">
+    <div class="title">
+      <div id="title1" class="subtitle"></div>
+      <div id="live1" class="live">LIVE</div>
+      <div id="playing1" class="playing">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+      </div>
+    </div>
   </div>
-
-  <!-- Volume -->
-  <div id="volume" class="fadeout">
-    <div id="barFull" class="bar"></div>
-    <div id="barEmpty" class="bar"></div>
-    <div id="sliderBtn"></div>
+  <div id="station2" class="station">
+    <div class="title">
+      <div id="title2" class="subtitle"></div>
+      <div id="live2" class="live">LIVE</div>
+      <div id="playing2" class="playing">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+      </div>
+    </div>
   </div>
+  <div id="station3" class="station">
+    <div class="title">
+      <div id="title3" class="subtitle"></div>
+      <div id="live3" class="live">LIVE</div>
+      <div id="playing3" class="playing">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+      </div>
+    </div>
+  </div>
+  <div id="station4" class="station">
+    <div class="title">
+      <div id="title4" class="subtitle"></div>
+      <div id="live4" class="live">LIVE</div>
+      <div id="playing4" class="playing">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+      </div>
+    </div>
+  </div>
+  <div class="padding"></div>
 
   <!-- Scripts -->
-  <script src="./siriwave.js"></script>
-  <script src="./player.js"></script>
   <script src="./howler.js"></script>
+  <script src="./radio.js"></script>
 </body>
 </html>
