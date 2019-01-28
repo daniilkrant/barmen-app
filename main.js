@@ -6,8 +6,8 @@ const superagent = require('superagent');
 const consts = require('./js/consts')
 const {ipcMain} = require('electron')
 
-let barmenWindow = null
-let musicWindow = null
+var barmenWindow = null
+var musicWindow = null
 var serverAddr = 'http://localhost:9000'
 
 class Bottle {
@@ -133,29 +133,34 @@ app.once('ready', () => {
   })
 
   ipcMain.on('music-pressed', (event, arg) => {
-    console.log('music-pressed');
-    musicWindow = new BrowserWindow({
-        x: 0,
-        y: 0,
-        width: 800,
-        height: 480,  
-        show: false,
-        resizable: false,
-        frame: false,
-        toolbar: false,
-        transparent: true
-      })
-    
-      musicWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'player', 'index.html'),
-        protocol: 'file:',
-        slashes: true
-      }))
-    
-      musicWindow.once('ready-to-show', () => {
-        barmenWindow.hide()
+      console.log('music-pressed');
+
+      if (musicWindow === null) {
+        musicWindow = new BrowserWindow({
+            x: 0,
+            y: 0,
+            width: 800,
+            height: 480,  
+            show: false,
+            resizable: false,
+            frame: false,
+            toolbar: false,
+            transparent: true
+        })
+        musicWindow.loadURL(url.format({
+            pathname: path.join(__dirname, 'player', 'index.html'),
+            protocol: 'file:',
+            slashes: true
+          }))
+      } else {
         musicWindow.maximize()
         musicWindow.show()
+      }
+
+      musicWindow.once('ready-to-show', () => {
+        barmenWindow.hide()
+        musicWindow.show()
+        musicWindow.webContents.send('initRadio', 0);
       })
   })
 
