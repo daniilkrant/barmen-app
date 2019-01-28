@@ -119,6 +119,15 @@ ipcRenderer.on('setBottle3Volume', function(cb , data) {
     bottle3Txt.innerHTML = data;
 });
 
+ipcRenderer.on('setBottleVolume', function(cb , data) {
+    if (data.index == 1)
+        bottle1Txt.innerHTML = data.percent + "%";
+    if (data.index == 2)
+        bottle2Txt.innerHTML = data.percent + "%";
+    if (data.index == 3)
+        bottle3Txt.innerHTML = data.percent + "%";
+});
+
 ipcRenderer.on('showPouringModal', function(cb , data) {
     showBlocker();
 });

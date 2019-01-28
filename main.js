@@ -8,63 +8,10 @@ const {ipcMain} = require('electron')
 
 var barmenWindow = null
 var musicWindow = null
-var serverAddr = 'http://localhost:9000'
+var serverAddr = 'http://127.0.0.1:9000'
+var portion = 50
 
-class Bottle {
-    constructor(full_volume, poured, position, is_pouring, current_level) {
-      this._full_volume = full_volume;
-      this._poured = poured;
-      this._position = position;
-      this._is_pouring = is_pouring;
-      this._current_level = current_level;
-    }
-  
-    get fullVolume() {
-      return this._full_volume;
-    }
-
-    get poured() {
-        return this._poured;
-    }
-
-    get position() {
-        return this._full_volume;
-    }
-
-    get isPouring() {
-        return this._is_pouring;
-    }
-
-    get currentLevel() {
-        return this._current_level;
-    }
-
-    set fullVolume(newValue) {
-        this._full_volume = newValue;
-    }
-
-    set poured(newValue) {
-        this._poured = newValue;
-    }
-
-    set position(newValue) {
-        this._full_volume = newValue;
-    }
-
-    set isPouring(newValue) {
-        this._is_pouring = newValue;
-    }
-
-    set currentLevel(newValue) {
-        this._current_level = newValue;
-    }
-};
-
-var isInited = false;
-
-var bottle1 = new Bottle(0, 0, 1, false, 0)
-var bottle2 = new Bottle(0, 0, 2, false, 0)
-var bottle3 = new Bottle(0, 0, 3, false, 0)
+var bottles = [{fullVolume: 500, currentVolume: 500},{fullVolume: 750, currentVolume: 750}, {fullVolume: 1000, currentVolume: 1000}]
 
 app.once('ready', () => {
   function initBottlesFirstTime() {
@@ -72,21 +19,24 @@ app.once('ready', () => {
       barmenWindow.webContents.send('initFirstBottle', 0);
       ipcMain.on('initFirstBottleResponse', (event, arg) => {
           console.log("First bottle volume " + arg);
-          bottle1.fullVolume = arg
+          bottles[0].fullVolume = arg
+          bottles[0].currentVolume = arg
           barmenWindow.webContents.send('initSecondBottle', 0);
       })
       ipcMain.on('initSecondBottleResponse', (event, arg) => {
           console.log("Second bottle volume " + arg);
-          bottle2.fullVolume = arg
+          bottles[1].fullVolume = arg
+          bottles[1].currentVolume = arg
           barmenWindow.webContents.send('initThirdBottle', 0);
       })
       ipcMain.on('initThirdBottleResponse', (event, arg) => {
           console.log("Third bottle volume " + arg);
-          bottle3.fullVolume = arg
+          bottles[2].fullVolume = arg
+          bottles[2].currentVolume = arg
           barmenWindow.webContents.send('disableRefillModal', 0);
-          barmenWindow.webContents.send('setBottle1Volume', bottle1.fullVolume);
-          barmenWindow.webContents.send('setBottle2Volume', bottle2.fullVolume);
-          barmenWindow.webContents.send('setBottle3Volume', bottle3.fullVolume);
+          barmenWindow.webContents.send('setBottle1Volume', bottles[0].fullVolume);
+          barmenWindow.webContents.send('setBottle2Volume', bottles[1].fullVolume);
+          barmenWindow.webContents.send('setBottle3Volume', bottles[2].fullVolume);
       })
   }
    
@@ -122,14 +72,18 @@ app.once('ready', () => {
     barmenWindow.webContents.send('showPouringModal', 0);
 
     superagent.get(serverAddr)
-    .query({scale: scale_num, volume: '50'})
-    .buffer(true)
-    .then((res, err) => {
-        if (err) { return console.log(err); }
-        console.log(res.text)
-        barmenWindow.webContents.send('hidePouringModal', 0);
-    });
+        .query({scale: scale_num, volume: portion})
+        .buffer(true)
+        .then((res, err) => {
+            if (err) { return console.log(err); }
+            console.log(res.text)
+            barmenWindow.webContents.send('hidePouringModal', 0);
+        });
 
+    bottles[scale_num-1].currentVolume -= portion
+    var percent = Math.round(bottles[scale_num-1].currentVolume / (bottles[scale_num-1].fullVolume / 100))
+    console.log(percent)
+    barmenWindow.webContents.send('setBottleVolume', {index: scale_num, percent: percent});
   })
 
   ipcMain.on('music-pressed', (event, arg) => {
