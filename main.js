@@ -135,7 +135,7 @@ app.once('ready', () => {
   ipcMain.on('music-pressed', (event, arg) => {
       console.log('music-pressed');
 
-      if (musicWindow === null) {
+      if (musicWindow == null) {
         musicWindow = new BrowserWindow({
             x: 0,
             y: 0,
@@ -147,11 +147,13 @@ app.once('ready', () => {
             toolbar: false,
             transparent: true
         })
+
         musicWindow.loadURL(url.format({
             pathname: path.join(__dirname, 'player', 'index.html'),
             protocol: 'file:',
             slashes: true
           }))
+
       } else {
         musicWindow.maximize()
         musicWindow.show()
