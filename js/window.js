@@ -20,6 +20,8 @@ const thirdVolumeBtn = document.getElementById("third_volume_btn")
 const fourthVolumeBtn = document.getElementById("fourth_volume_btn")
 
 const musicBtn = document.getElementById("music_button")
+const wifiBtn = document.getElementById("wifi_button")
+
 
 chooseVolumeModal.style.display = "none";
 waitingModal.style.display = "none";
@@ -71,6 +73,10 @@ fourthVolumeBtn.addEventListener('click', function() {
 
 musicBtn.addEventListener('click', function() {
     ipcRenderer.send('music-pressed', 1)
+})
+
+wifiBtn.addEventListener('click', function() {
+    ipcRenderer.send('wifi-pressed', 1)
 })
 
 ipcRenderer.on('disableInitingModal', function(event , data) {

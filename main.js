@@ -5,11 +5,14 @@ const http = require('http')
 const superagent = require('superagent');
 const consts = require('./js/consts')
 const {ipcMain} = require('electron')
+const VirtualKeyboard = require('electron-virtual-keyboard');
 
 var barmenWindow = null
 var musicWindow = null
+var wifiWindow = null
 var serverAddr = 'http://127.0.0.1:9000'
 var portion = 50
+let vkb
 
 var bottles = [{fullVolume: 500, currentVolume: 500},{fullVolume: 750, currentVolume: 750}, {fullVolume: 1000, currentVolume: 1000}]
 
@@ -68,6 +71,13 @@ app.once('ready', () => {
     win = null
   })
 
+  ipcMain.on('save-wifi-pressed', (event, arg) => {
+    console.log(arg.name)
+    console.log(arg.pass)
+    wifiWindow.hide()
+    barmenWindow.show()
+  })
+
   ipcMain.on('bottle-pressed', (event, scale_num) => {
     barmenWindow.webContents.send('showPouringModal', 0);
 
@@ -107,7 +117,6 @@ app.once('ready', () => {
             protocol: 'file:',
             slashes: true
           }))
-
       } else {
         musicWindow.maximize()
         musicWindow.show()
@@ -120,6 +129,40 @@ app.once('ready', () => {
       })
   })
 
+  ipcMain.on('wifi-pressed', (event, arg) => {
+    console.log('wifi-pressed');
+
+    if (wifiWindow == null) {
+      wifiWindow = new BrowserWindow({
+          x: 0,
+          y: 0,
+          width: 800,
+          height: 480,  
+          show: false,
+          resizable: false,
+          frame: false,
+          toolbar: false,
+          transparent: true
+      })
+
+      wifiWindow.loadURL(url.format({
+          pathname: path.join(__dirname, 'wifi-conf', 'index.html'),
+          protocol: 'file:',
+          slashes: true
+        }))
+    } else {
+      wifiWindow.maximize()
+      wifiWindow.show()
+    }
+
+    wifiWindow.once('ready-to-show', () => {
+      barmenWindow.hide()
+      wifiWindow.show()
+      wifiWindow.webContents.setFrameRate(30)
+      vkb = new VirtualKeyboard(wifiWindow.webContents);
+    })
+})
+
   ipcMain.on('barmen-pressed', (event, arg) => {
     console.log('barmen-pressed');
     musicWindow.hide()
@@ -127,12 +170,3 @@ app.once('ready', () => {
   })
 
 })
-
-
-// Start pouring
-// barmenWindow   -->   main  -->   gpio_routine
-//     button_pres     gpio
-
-// Stop pouring
-// gpio_routine   -->   main   -->   barmenWindow
-//               done          done
