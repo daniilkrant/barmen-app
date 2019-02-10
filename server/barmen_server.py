@@ -2,15 +2,19 @@ import sys, urlparse, json
 from threading import Thread
 from SocketServer import ThreadingMixIn
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
-sys.path.append('/home/pi/barmen-app/python/scale_scripts')
 from gpio_routine import PourRoutine
+from wifi_routine import WiFiRoutine
 
 kScaleLabel = 'scale'
 kVolumeLabel = 'volume'
+kWifiLabel = 'wifi'
+kSsidLabel = 'ssid'
+kPassLabel = 'pass'
 kSuccessResponse = "OK"
 kFailureResponse = "FAIL"
 
 pouring = PourRoutine()
+wifi = WiFiRoutine()
 
 class ThreadingHTTPServer(ThreadingMixIn, HTTPServer):
     pass
@@ -19,9 +23,19 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         query_components = urlparse.parse_qs(urlparse.urlparse(self.path).query)
-        scaleNumber = next(iter(query_components[kScaleLabel] or []), None)
-        volume = next(iter(query_components[kVolumeLabel] or []), None)
-        print('Server: Request: Scale number ' + scaleNumber + ' Volume: ' + volume)
+        isWifi = query_components.get(kWifiLabel, None)
+        if isWifi != None:
+            res = wifi.scan()
+            self.sendSuccessRes(res)
+            return
+        ssid = query_components.get(kSsidLabel, None)
+        passw = query_components.get(kPassLabel, None)
+        if ssid != None and passw != None:
+            wifi.saveSSID(ssid, passw)
+            self.sendSuccess()
+            return
+        scaleNumber = query_components.get(kScaleLabel, None)
+        volume = query_components.get(kVolumeLabel, None)
         if scaleNumber != None and volume != None:
             pouring.pour(scaleNumber, volume)
             self.sendSuccess()
@@ -33,6 +47,12 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Content-type", "text/plain")
         self.end_headers()
         self.wfile.write(kSuccessResponse.encode())
+
+    def sendSuccessRes(self, res):
+        self.send_response(200)
+        self.send_header("Content-type", "text/plain")
+        self.end_headers()
+        self.wfile.write(res.encode())
 
     def sendError(self):
         self.send_response(404)

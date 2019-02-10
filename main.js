@@ -72,10 +72,15 @@ app.once('ready', () => {
   })
 
   ipcMain.on('save-wifi-pressed', (event, arg) => {
-    console.log(arg.name)
-    console.log(arg.pass)
-    wifiWindow.hide()
-    barmenWindow.show()
+    superagent.get(serverAddr)
+        .query({ssid: arg.name, pass: arg.pass})
+        .buffer(true)
+        .then((res, err) => {
+            if (err) { return console.log(err); }
+            console.log(res.text)
+            wifiWindow.hide()
+            barmenWindow.show()
+        });
   })
 
   ipcMain.on('bottle-pressed', (event, scale_num) => {

@@ -4,7 +4,6 @@ node js
 pi-gpio
 export DISPLAY=:0
 export ELECTRON_ENABLE_LOGGING=true
-npm install howler (?)
+unclutter -idle 0 &
 npm install superagent
-npm install electron-virtual-keyboard
 https://github.com/tatobari/hx711py
