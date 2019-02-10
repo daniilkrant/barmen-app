@@ -58,7 +58,7 @@ class PourRoutine(object):
         return val
 
     #blocking
-    def pour(self, index, volume):
+    def pour(self, index, portion):
         i_index = int(index) - 1
 
         GPIO.setup(self.gpioList[i_index], GPIO.OUT)
@@ -70,7 +70,7 @@ class PourRoutine(object):
         # GPIO.setup(self.gpioList[i_index], GPIO.OUT)
         # GPIO.output(self.gpioList[i_index], trigger_on)
         # while True:
-        #     if getWeight(i_index) <= (current_level - volume):
+        #     if getWeight(i_index) <= (current_level - portion):
         #         GPIO.output(gpioList[i_index], trigger_off)
         #         break
         #     else:

@@ -65,7 +65,7 @@ def serve_on_port(port):
     server.serve_forever()
 
 try :
-    with open('/home/pi/barmen-app/server/barmen_pinout.cfg') as f:
+    with open('/etc/conf/barmen_pinout.cfg') as f:
         config = json.load(f)
 
     pump_pins = config['Pumps']['pins']

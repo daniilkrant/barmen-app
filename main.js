@@ -5,7 +5,6 @@ const http = require('http')
 const superagent = require('superagent');
 const consts = require('./js/consts')
 const {ipcMain} = require('electron')
-const VirtualKeyboard = require('electron-virtual-keyboard');
 
 var barmenWindow = null
 var musicWindow = null
@@ -64,7 +63,7 @@ app.once('ready', () => {
   barmenWindow.once('ready-to-show', () => {
     barmenWindow.maximize()
     barmenWindow.show()
-    initBottlesFirstTime()
+    // initBottlesFirstTime()
   })
 
   barmenWindow.on('closed', () => {
