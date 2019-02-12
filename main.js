@@ -21,20 +21,14 @@ app.once('ready', () => {
       barmenWindow.webContents.send('initFirstBottle', 0);
       ipcMain.on('initFirstBottleResponse', (event, arg) => {
           console.log("First bottle volume " + arg);
-          bottles[0].fullVolume = arg
-          bottles[0].currentVolume = arg
           barmenWindow.webContents.send('initSecondBottle', 0);
       })
       ipcMain.on('initSecondBottleResponse', (event, arg) => {
           console.log("Second bottle volume " + arg);
-          bottles[1].fullVolume = arg
-          bottles[1].currentVolume = arg
           barmenWindow.webContents.send('initThirdBottle', 0);
       })
       ipcMain.on('initThirdBottleResponse', (event, arg) => {
           console.log("Third bottle volume " + arg);
-          bottles[2].fullVolume = arg
-          bottles[2].currentVolume = arg
           barmenWindow.webContents.send('disableRefillModal', 0);
           barmenWindow.webContents.send('setBottle1Volume', bottles[0].fullVolume);
           barmenWindow.webContents.send('setBottle2Volume', bottles[1].fullVolume);
@@ -91,6 +85,7 @@ app.once('ready', () => {
         .then((res, err) => {
             if (err) { return console.log(err); }
             console.log(res.text)
+            barmenWindow.webContents.send('setBottleVolume', {index: scale_num, ml: res.text})
             barmenWindow.webContents.send('hidePouringModal', 0);
         });
 

@@ -1,25 +1,37 @@
 import RPi.GPIO as GPIO
 import time
 import sys
-from hx711 import HX711
+from hx711 import HX711 
 
 trigger_on = GPIO.LOW
 trigger_off = GPIO.HIGH
 
+class Bottle(object):
+    def __init__(self):
+        self.total_volume = 0
+        self.poured = 0
+        self.needsToRefill = False
+
 class PourRoutine(object):
     def __init__(self):
+        GPIO.setmode(GPIO.BCM)
         self.scalesAmount = 3
         self.scaleList = []
         self.gpioList = []
+        self.bottleList = []
 
     def cleanAndExit(self):
-        print "Server: Cleaning..."
+        print("Server: Cleaning...")
         GPIO.cleanup()
-        print "Server: Bye!"
+        print("Server: Bye!")
         sys.exit()
 
     # GPIO pins
     def setupScales(self, scale_pin_pairs, pump_pins):
+
+        for i in xrange(self.scalesAmount):
+            self.bottleList.append(Bottle())
+
         print('Server: ----------------------')
         print('Server: Creating scale objects')
         for dout, sck in scale_pin_pairs:
@@ -37,24 +49,17 @@ class PourRoutine(object):
 
         print('Server: ----------------------')
 
-        for i in xrange(self.scalesAmount):
-            self.scaleList[i].set_reading_format("MSB", "MSB")
-
-        # HOW TO CALCULATE THE REFFERENCE UNIT
-        # To set the reference unit to 1. Put 1kg on your sensor or anything you have and know exactly how much it weights.
-        # In this case, 92 is 1 gram because, with 1 as a reference unit I got numbers near 0 without any weight
-        # and I got numbers around 184000 when I added 2kg. So, according to the rule of thirds:
-        # If 2000 grams is 184000 then 1000 grams is 184000 / 2000 = 92.
-        #scale1.set_reference_unit(1)
-        for i in xrange(self.scalesAmount):
-            self.scaleList[i].set_reference_unit(2005)
-            self.scaleList[i].reset()
-            self.scaleList[i].tare()
+        try :
+            for i in xrange(self.scalesAmount):
+                self.scaleList[i].zero()
+                self.scaleList[i].set_scale_ratio(2025)
+                # while True:
+                #     print(self.getWeight(0))
+        except Exception as exc :
+            print(exc)
 
     def getWeight(self, index):
-        val = self.scaleList[index].get_weight(7)
-        self.scaleList[index].power_down()
-        self.scaleList[index].power_up()
+        val = self.scaleList[index].get_weight_mean(7)
         return val
 
     #blocking
@@ -66,15 +71,17 @@ class PourRoutine(object):
         time.sleep(1)
         GPIO.output(self.gpioList[i_index], trigger_off)
 
-        # current_level = self.getWeight(i_index)
-        # GPIO.setup(self.gpioList[i_index], GPIO.OUT)
-        # GPIO.output(self.gpioList[i_index], trigger_on)
-        # while True:
-        #     if getWeight(i_index) <= (current_level - portion):
-        #         GPIO.output(gpioList[i_index], trigger_off)
-        #         break
-        #     else:
-        #         sleep(0.01)
+        bottleList[i_index].poured = self.getWeight(i_index) * -1
+        if bottleList[i_index].poured > bottleList[i_index].total_volume - portion:
+            return -1
+        GPIO.setup(self.gpioList[i_index], GPIO.OUT)
+        GPIO.output(self.gpioList[i_index], trigger_on)
+        while True:
+            if getWeight(i_index) > ((bottleList[i_index].poured * -1) - portion):
+                GPIO.output(gpioList[i_index], trigger_off)
+                return (bottleList[i_index].total_volume - bottleList[i_index].poured)
+            else:
+                sleep(0.01)
 
 
 

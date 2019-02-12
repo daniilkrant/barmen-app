@@ -127,11 +127,12 @@ ipcRenderer.on('setBottle3Volume', function(cb , data) {
 
 ipcRenderer.on('setBottleVolume', function(cb , data) {
     if (data.index == 1)
-        bottle1Txt.innerHTML = data.percent + "%";
+        bottle1Txt.innerHTML = data.ml + "ml";
     if (data.index == 2)
-        bottle2Txt.innerHTML = data.percent + "%";
+        bottle2Txt.innerHTML = data.ml + "ml";
     if (data.index == 3)
-        bottle3Txt.innerHTML = data.percent + "%";
+        bottle3Txt.innerHTML = data.ml + "ml";
+    //TODO: block bottles btns here
 });
 
 ipcRenderer.on('showPouringModal', function(cb , data) {
