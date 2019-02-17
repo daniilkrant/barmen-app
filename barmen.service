@@ -6,8 +6,8 @@ After=network.target
 Type=simple
 Restart=always
 RestartSec=1
-User=root
-ExecStart=/bin/bash /usr/bin/run.sh
+User=pi
+ExecStart=/bin/bash /home/pi/barmen-app/run.sh
 
 [Install]
 WantedBy=multi-user.target

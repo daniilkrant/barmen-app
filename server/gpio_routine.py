@@ -8,7 +8,7 @@ trigger_off = GPIO.HIGH
 
 class Bottle(object):
     def __init__(self):
-        self.total_volume = 0
+        self.total_volume = 750
         self.poured = 0
         self.needsToRefill = False
 
@@ -25,6 +25,11 @@ class PourRoutine(object):
         GPIO.cleanup()
         print("Server: Bye!")
         sys.exit()
+
+    def setVolume(i, volume):
+        i_index = int(i) - 1
+        self.bottleList[i_index].total_volume = int(volume)
+        print("Bottle " + str(i_index) + " volume: " + volume)
 
     # GPIO pins
     def setupScales(self, scale_pin_pairs, pump_pins):
@@ -55,20 +60,18 @@ class PourRoutine(object):
 
         print('Server: ----------------------')
 
-        while True:
-            res = input('Bottle ')
-            self.pour(res, 50)
+      #  while True:
+      #      res = input('Bottle ')
+      #      self.pour(res, 50)
 
     def getWeight(self, index):
-        val = self.scaleList[index].get_weight_mean(2)
+        val = self.scaleList[index].get_weight_mean(3)
         return val
 
     #blocking
     def pour(self, index, portion):
+	print('Pouring: sc: ' + str(index) + 'vol: ' + str(portion))
         i_index = int(index) - 1
-
-        # while True:
-        #     print self.getWeight(i_index)
 
         # GPIO.setup(self.gpioList[i_index], GPIO.OUT)
         # GPIO.output(self.gpioList[i_index], trigger_on)
@@ -76,21 +79,22 @@ class PourRoutine(object):
         # GPIO.output(self.gpioList[i_index], trigger_off)
 
         self.bottleList[i_index].poured = self.getWeight(i_index) * -1
-        print(self.bottleList[i_index].poured)
-        # if self.bottleList[i_index].poured > self.bottleList[i_index].total_volume - portion:
-        #     return -1
+        
+        if self.bottleList[i_index].poured > self.bottleList[i_index].total_volume - (1.5 * portion):
+            return 'Empty'
+        
         GPIO.setup(self.gpioList[i_index], GPIO.OUT)
         GPIO.output(self.gpioList[i_index], trigger_on)
 
         while True:
             curr = self.getWeight(i_index) * -1
+            print(curr)
             if curr >= (self.bottleList[i_index].poured + portion):
                 GPIO.output(self.gpioList[i_index], trigger_off)
                 print('Done')
-                return (self.bottleList[i_index].total_volume - self.bottleList[i_index].poured)
+                return 'Poured'
             else:
                 time.sleep(0.01)
-                print(curr)
 
 
 

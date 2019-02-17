@@ -5,9 +5,9 @@ const bottle1Btn = document.getElementById("bottle1_btn")
 const bottle2Btn = document.getElementById("bottle2_btn")
 const bottle3Btn = document.getElementById("bottle3_btn")
 
-const bottle1Txt = document.getElementById("bottle1_txt")
-const bottle2Txt = document.getElementById("bottle2_txt")
-const bottle3Txt = document.getElementById("bottle3_txt")
+const bottle1Sts = document.getElementById("bottle1_status")
+const bottle2Sts = document.getElementById("bottle2_status")
+const bottle3Sts = document.getElementById("bottle3_status")
 
 const blockerModal = document.getElementById('blocker_modal');
 const waitingModal = document.getElementById('preparing_modal');
@@ -113,26 +113,28 @@ ipcRenderer.on('initThirdBottle', function(cb , data) {
     initing_bottle_index = 3;
 });
 
-ipcRenderer.on('setBottle1Volume', function(cb , data) {
-    bottle1Txt.innerHTML = data;
-});
-
-ipcRenderer.on('setBottle2Volume', function(cb , data) {
-    bottle2Txt.innerHTML = data;
-});
-
-ipcRenderer.on('setBottle3Volume', function(cb , data) {
-    bottle3Txt.innerHTML = data;
-});
-
-ipcRenderer.on('setBottleVolume', function(cb , data) {
+ipcRenderer.on('blockBottle', function(cb , data) {
     if (data.index == 1)
-        bottle1Txt.innerHTML = data.ml + "ml";
+        bottle1Sts.hidden = true;
+        bottle1Btn.disabled = true;
     if (data.index == 2)
-        bottle2Txt.innerHTML = data.ml + "ml";
+        bottle2Sts.hidden = true;
+        bottle2Btn.disabled = true;
     if (data.index == 3)
-        bottle3Txt.innerHTML = data.ml + "ml";
-    //TODO: block bottles btns here
+        bottle3Sts.hidden = true;
+        bottle3Btn.disabled = true;
+});
+
+bottle1Sts.addEventListener('click', function () {
+    //TODO:: add
+});
+
+bottle2Sts.addEventListener('click', function () {
+    //TODO:: add
+});
+
+bottle3Sts.addEventListener('click', function () {
+    //TODO:: add
 });
 
 ipcRenderer.on('showPouringModal', function(cb , data) {

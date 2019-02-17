@@ -5,13 +5,15 @@ const http = require('http')
 const superagent = require('superagent');
 const consts = require('./js/consts')
 const {ipcMain} = require('electron')
+const VirtualKeyboard = require('./wifi-conf/kbd/main')
+
+let vkb
 
 var barmenWindow = null
 var musicWindow = null
 var wifiWindow = null
 var serverAddr = 'http://127.0.0.1:9000'
 var portion = 50
-let vkb
 
 var bottles = [{fullVolume: 500, currentVolume: 500},{fullVolume: 750, currentVolume: 750}, {fullVolume: 1000, currentVolume: 1000}]
 
@@ -21,18 +23,21 @@ app.once('ready', () => {
       barmenWindow.webContents.send('initFirstBottle', 0);
       ipcMain.on('initFirstBottleResponse', (event, arg) => {
           console.log("First bottle volume " + arg);
+          superagent.get(serverAddr)
+              .query({index: 1, volume: arg})
           barmenWindow.webContents.send('initSecondBottle', 0);
       })
       ipcMain.on('initSecondBottleResponse', (event, arg) => {
           console.log("Second bottle volume " + arg);
+          superagent.get(serverAddr)
+              .query({index: 2, volume: arg})
           barmenWindow.webContents.send('initThirdBottle', 0);
       })
       ipcMain.on('initThirdBottleResponse', (event, arg) => {
           console.log("Third bottle volume " + arg);
+          superagent.get(serverAddr)
+              .query({index: 3, volume: arg})
           barmenWindow.webContents.send('disableRefillModal', 0);
-          barmenWindow.webContents.send('setBottle1Volume', bottles[0].fullVolume);
-          barmenWindow.webContents.send('setBottle2Volume', bottles[1].fullVolume);
-          barmenWindow.webContents.send('setBottle3Volume', bottles[2].fullVolume);
       })
   }
    
@@ -57,7 +62,7 @@ app.once('ready', () => {
   barmenWindow.once('ready-to-show', () => {
     barmenWindow.maximize()
     barmenWindow.show()
-    // initBottlesFirstTime()
+    initBottlesFirstTime()
   })
 
   barmenWindow.on('closed', () => {
@@ -71,13 +76,14 @@ app.once('ready', () => {
         .then((res, err) => {
             if (err) { return console.log(err); }
             console.log(res.text)
-            wifiWindow.hide()
-            barmenWindow.show()
         });
+        wifiWindow.hide()
+        barmenWindow.show()
   })
 
   ipcMain.on('bottle-pressed', (event, scale_num) => {
     barmenWindow.webContents.send('showPouringModal', 0);
+    console.log(scale_num)
 
     superagent.get(serverAddr)
         .query({scale: scale_num, volume: portion})
@@ -85,14 +91,12 @@ app.once('ready', () => {
         .then((res, err) => {
             if (err) { return console.log(err); }
             console.log(res.text)
-            barmenWindow.webContents.send('setBottleVolume', {index: scale_num, ml: res.text})
+            if(res.text.indexOf('Empty') > -1) {
+                barmenWindow.webContents.send('blockBottle', {index: scale_num})
+            }
             barmenWindow.webContents.send('hidePouringModal', 0);
         });
 
-    bottles[scale_num-1].currentVolume -= portion
-    var percent = Math.round(bottles[scale_num-1].currentVolume / (bottles[scale_num-1].fullVolume / 100))
-    console.log(percent)
-    barmenWindow.webContents.send('setBottleVolume', {index: scale_num, percent: percent});
   })
 
   ipcMain.on('music-pressed', (event, arg) => {
