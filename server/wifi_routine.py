@@ -19,5 +19,5 @@ update_config=1\ncountry=us\nnetwork={\n\
     psk=\"%s\"\n\
 }" % (ssid[0], passw[0])
         f.write(conf)
-        bashCommand = "sudo shutdown -r -h now"
-        output = subprocess.check_output(['bash','-c', bashCommand])
+        # bashCommand = "sudo shutdown -r -h now"
+        # output = subprocess.check_output(['bash','-c', bashCommand])

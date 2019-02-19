@@ -25,18 +25,24 @@ app.once('ready', () => {
           console.log("First bottle volume " + arg);
           superagent.get(serverAddr)
               .query({index: 1, volume: arg})
+              .then((res, err) => {
+                if (err) { return console.log(err); }});
           barmenWindow.webContents.send('initSecondBottle', 0);
       })
       ipcMain.on('initSecondBottleResponse', (event, arg) => {
           console.log("Second bottle volume " + arg);
           superagent.get(serverAddr)
               .query({index: 2, volume: arg})
+              .then((res, err) => {
+                if (err) { return console.log(err); }});
           barmenWindow.webContents.send('initThirdBottle', 0);
       })
       ipcMain.on('initThirdBottleResponse', (event, arg) => {
           console.log("Third bottle volume " + arg);
           superagent.get(serverAddr)
               .query({index: 3, volume: arg})
+              .then((res, err) => {
+                if (err) { return console.log(err); }});
           barmenWindow.webContents.send('disableRefillModal', 0);
       })
   }
@@ -90,13 +96,21 @@ app.once('ready', () => {
         .buffer(true)
         .then((res, err) => {
             if (err) { return console.log(err); }
-            console.log(res.text)
             if(res.text.indexOf('Empty') > -1) {
+                console.log('Blocking bottle: ' + scale_num)
                 barmenWindow.webContents.send('blockBottle', {index: scale_num})
             }
             barmenWindow.webContents.send('hidePouringModal', 0);
         });
+  })
 
+  ipcMain.on('blockBottleResponse', (event, data) => {
+    superagent.get(serverAddr)
+        .query({index: data.index, volume: data.volume})
+        .buffer(true)
+        .then((res, err) => {
+            barmenWindow.webContents.send('disableRefillModal', 0);
+        });
   })
 
   ipcMain.on('music-pressed', (event, arg) => {

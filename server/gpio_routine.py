@@ -26,9 +26,10 @@ class PourRoutine(object):
         print("Server: Bye!")
         sys.exit()
 
-    def setVolume(i, volume):
+    def setVolume(self, i, volume):
         i_index = int(i) - 1
         self.bottleList[i_index].total_volume = int(volume)
+        self.bottleList[i_index].poured = 0
         print("Bottle " + str(i_index) + " volume: " + volume)
 
     # GPIO pins
@@ -75,8 +76,13 @@ class PourRoutine(object):
 
         # GPIO.setup(self.gpioList[i_index], GPIO.OUT)
         # GPIO.output(self.gpioList[i_index], trigger_on)
-        # time.sleep(1)
+        # time.sleep(0.5)
         # GPIO.output(self.gpioList[i_index], trigger_off)
+
+        # self.bottleList[i_index].poured += 150
+        
+        # if self.bottleList[i_index].poured > self.bottleList[i_index].total_volume - (1.5 * 150):
+        #     return 'Empty'
 
         self.bottleList[i_index].poured = self.getWeight(i_index) * -1
         

@@ -27,7 +27,7 @@ class Handler(BaseHTTPRequestHandler):
         index = query_components.get(kIndexLabel, None)
         volume = query_components.get(kVolumeLabel, None)
         if index != None and volume != None:
-            pouring.setVolume(index, volume)
+            pouring.setVolume(index[0], volume[0])
             self.sendSuccess()
             return
         isWifi = query_components.get(kWifiLabel, None)
