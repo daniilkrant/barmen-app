@@ -38,7 +38,7 @@ class Handler(BaseHTTPRequestHandler):
         ssid = query_components.get(kSsidLabel, None)
         passw = query_components.get(kPassLabel, None)
         if ssid != None and passw != None:
-            wifi.saveSSID(ssid[0], passw[0])
+            wifi.saveSSID(ssid, passw)
             self.sendSuccess()
             return
         scaleNumber = query_components.get(kScaleLabel, None)

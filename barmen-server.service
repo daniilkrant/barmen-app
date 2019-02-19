@@ -1,0 +1,13 @@
+[Unit]
+Description=Barmen server
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+ExecStart=/usr/bin/python /home/pi/barmen-app/server/barmen_server.py
+
+[Install]
+WantedBy=multi-user.target

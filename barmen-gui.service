@@ -1,0 +1,13 @@
+[Unit]
+Description=Barmen gui
+After=barmen-server.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=pi
+ExecStart=/bin/bash /home/pi/barmen-app/run.sh
+
+[Install]
+WantedBy=multi-user.target

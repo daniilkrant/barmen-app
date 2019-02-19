@@ -12,6 +12,7 @@ let vkb
 var barmenWindow = null
 var musicWindow = null
 var wifiWindow = null
+var videoWindow = null
 var serverAddr = 'http://127.0.0.1:9000'
 var portion = 50
 
@@ -184,6 +185,44 @@ app.once('ready', () => {
     console.log('barmen-pressed');
     musicWindow.hide()
     barmenWindow.show()
+  })
+
+  ipcMain.on('userIdle', (event, arg) => {
+    console.log('userIdle');
+
+    if (videoWindow == null) {
+      videoWindow = new BrowserWindow({
+          x: 0,
+          y: 0,
+          width: 800,
+          height: 480,  
+          show: false,
+          resizable: false,
+          frame: false,
+          toolbar: false,
+          transparent: true
+      })
+
+      videoWindow.loadURL(url.format({
+          pathname: path.join(__dirname, 'video', 'index.html'),
+          protocol: 'file:',
+          slashes: true
+        }))
+    } else {
+      videoWindow.maximize()
+      videoWindow.show()
+    }
+
+    videoWindow.once('ready-to-show', () => {
+      videoWindow.show()
+      videoWindow.webContents.send('userIdlePlay', 0);
+    })
+
+  })
+
+  ipcMain.on('userBack', (event, arg) => {
+    videoWindow.hide()
+    videoWindow.webContents.send('userIdlePlay', 0);
   })
 
 })

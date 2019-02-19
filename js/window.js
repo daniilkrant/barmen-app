@@ -32,6 +32,29 @@ let initing_bottle_index
 let status, refill_index
 let is_refilling = false
 
+var inactivityTime = function () {
+    var t;
+    window.onload = resetTimer;
+    // DOM Events
+    document.onload = resetTimer;
+    document.onmousemove = resetTimer;
+    document.onmousedown = resetTimer;
+    document.ontouchstart = resetTimer;
+    document.onclick = resetTimer;
+    document.onkeypress = resetTimer;
+
+    function logout() {
+        ipcRenderer.send('userIdle', 0)
+    }
+
+    function resetTimer() {
+        clearTimeout(t);
+        t = setTimeout(logout, 10000)
+        // 1000 milisec = 1 sec
+    }
+};
+inactivityTime()
+
 function showBlocker() {
     blockerModal.style.display = "block";
 }
