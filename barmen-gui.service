@@ -1,6 +1,6 @@
 [Unit]
 Description=Barmen gui
-After=barmen-server.target
+After=network.target
 
 [Service]
 Type=simple
