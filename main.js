@@ -92,8 +92,13 @@ app.once('ready', () => {
     barmenWindow.webContents.send('showPouringModal', 0);
     console.log(scale_num)
 
+    let currentPortion = portion
+    if (scale_num === 3) {
+        currentPortion = portion * 2
+    }
+
     superagent.get(serverAddr)
-        .query({scale: scale_num, volume: portion})
+        .query({scale: scale_num, volume: currentPortion})
         .buffer(true)
         .then((res, err) => {
             if (err) { return console.log(err); }
